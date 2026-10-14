@@ -1,0 +1,17 @@
+**/node_modules/
+**/build/
+**/dist/
+**/__pycache__/
+**/.venv/
+**/venv/
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pyc
+**/*.sqlite
+**/*.sqlite3
+**/*.db
+**/*.log
+tmp/
+backend-mern/data/
+.DS_Store

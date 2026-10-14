@@ -1,0 +1,21 @@
+{
+  "dataset": "eCommerce AI synthetic demo v1",
+  "inserted": {
+    "order_items": 0,
+    "orders": 0,
+    "products": 0,
+    "reviews": 0,
+    "users": 0
+  },
+  "demo_counts": {
+    "order_items": 36,
+    "orders": 16,
+    "products": 12,
+    "reviews": 10,
+    "users": 9
+  },
+  "demo_order_value": 2047.5,
+  "demo_admin": "admin@demo.example",
+  "demo_password": "DemoStore2026!",
+  "database": "backend-mern/data/ecommerce.sqlite"
+}

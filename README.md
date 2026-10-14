@@ -1,73 +1,79 @@
-# E-commerce Product Analysis
+# eCommerce AI
 
-A Python notebook project that explores a retail product dataset and groups products using K-means clustering. The work covers missing-value handling, exploratory plots, feature scaling, and interpretation of product clusters.
+A commerce operations prototype built with React, Express and SQLite. The running Node application connects catalog and inventory management, order inspection, dashboard totals and a transparent pricing sandbox. Separate Python examples explore embeddings, vector search, recommendations and forecasting.
 
-The dataset contains **609 product records across seven categories**. This repository is an exploratory analysis project; it is separate from the e-commerce web application featured in my portfolio.
+![Store dashboard](docs/assets/dashboard-after.jpg)
 
-## Analysis workflow
+## Quick start
 
-1. Inspect the dataset shape, types, missing values, and duplicate rows.
-2. Fill missing numeric values and gender labels, then remove records with remaining missing fields in the latest notebook.
-3. Plot price and rating distributions, category counts, and gender counts.
-4. Standardize `Original_price`, `price`, `perc_of_unit_sold`, and `rating` with `StandardScaler`.
-5. Compare K-means inertia for one through ten clusters, then fit a four-cluster model with `random_state=42`.
-6. Visualize cluster membership and calculate summaries such as mean price and rating.
+Use Node.js 22, npm and Python 3.10 or newer. From a fresh clone:
 
-## Repository guide
+```sh
+npm ci --prefix backend-mern
+npm ci --prefix frontend-react
+npm run build --prefix frontend-react
+npm run init-db --prefix backend-mern
+python tools/seed_demo_data.py
+```
 
-| File | Purpose |
+Copy `backend-mern/.env.example` to `backend-mern/.env`, then start:
+
+```sh
+npm start --prefix backend-mern
+```
+
+Open http://localhost:6220/dashboard. Without the optional `.env`, the server defaults to port 8800. It serves the React build and API together. Database initialization creates a new local SQLite file; no existing database is distributed.
+
+The idempotent seed adds 12 products, 9 fictional accounts, 16 orders, 36 line items and 10 reviews, preserving existing rows and taking an initial backup. All demo addresses use `.example`.
+
+## Scope
+
+| Area | Current behavior |
 | --- | --- |
-| [`update_2_E_commerce_analysis.ipynb`](update_2_E_commerce_analysis.ipynb) | Most recent analysis: cleaning, exploratory plots, scaling, and clustering |
-| [`project1update .ipynb`](project1update%20.ipynb) | Earlier version with additional distribution, outlier, and correlation exploration |
-| [`Copy_of_E_commerce_analysis.ipynb`](Copy_of_E_commerce_analysis.ipynb) | Initial inspection and missing-value experiments |
-| [`Datasets/combined_datasets.csv`](Datasets/combined_datasets.csv) | Combined product dataset used by the notebooks |
-| [`Datasets/`](Datasets/) | Category-specific CSV files |
-| [`Project DataSet.pdf`](Project%20DataSet.pdf) | Original dataset documentation |
+| Catalog and inventory | Product listing, creation, editing and deletion |
+| Orders | Create and inspect orders with linked line items |
+| Dashboard | API-derived product/order counts and total order value |
+| Pricing sandbox | Demand, stock and competitor inputs; previews a result |
+| Interface | Responsive navigation and persistent light/dark preferences |
+| Python examples | Separate embeddings, vector similarity, pricing and forecasting modules |
 
-The CSV fields include category, product, original price, listed price, percentage of units sold, rating, shipping eligibility, and gender. It also contains an exported row-index column.
+For the seeded smartwatch, demand `0.8` and competitor price `145` produce a suggested price of **154.80**. This is a documented rule, not a trained pricing model, and does not change the stored catalog price.
 
-## Run locally
+## Architecture
 
-The latest notebook records Python 3.11.3 in its kernel metadata. Required libraries are pandas, NumPy, Matplotlib, seaborn, and scikit-learn, plus Jupyter for interactive execution.
-
-```bash
-git clone https://github.com/mohamed6hani/E-commerce-anaylsis.git
-cd E-commerce-anaylsis
-python -m venv .venv
+```text
+frontend-react/      React operations interface
+backend-mern/        Active Express API and SQLite store (historical folder name)
+shared/              Separate Python AI examples
+backend-fastapi/     Alternative Python backend example
+backend-django/      Alternative Django backend example
+tools/               Repeatable seed and isolated API smoke check
+docs/                Architecture, walkthrough and demo screenshots
 ```
 
-Activate the environment:
+The active Node server uses SQLite rather than MongoDB. Dormant Mongoose model/config files remain as historical examples and are not imported by the running API. FastAPI and Django are separate experiments, not validated interchangeable backends for this UI.
 
-```powershell
-# Windows PowerShell
-.\.venv\Scripts\Activate.ps1
+## Validation
+
+```sh
+npm run build --prefix frontend-react
+python tools/smoke_demo.py
 ```
 
-```bash
-# macOS / Linux
-source .venv/bin/activate
-```
+The smoke check uses an isolated temporary project/database and validates clean initialization, repeatable seeding, foreign keys, order totals, pricing and product CRUD. CI runs the frontend build and this integration check. Python alternatives and model downloads are outside the validated Node demo.
 
-```bash
-python -m pip install jupyterlab pandas numpy matplotlib seaborn scikit-learn
-python -m jupyter lab
-```
+## Development
 
-Open `update_2_E_commerce_analysis.ipynb` from the repository root. For a portable input path, change its CSV-loading cell to:
+For React's development server, run the backend on port **8800** (the frontend proxy) and `npm start --prefix frontend-react` in another terminal. Rebuild the frontend before returning to the combined server on port 6220.
 
-```python
-df = pd.read_csv("Datasets/combined_datasets.csv")
-```
+## Project brief
 
-Run the cells in order. The repository does not pin library versions, and its saved outputs come from earlier executions; rerunning with a current environment may require compatibility adjustments.
+[Three-page overview](output/pdf/E-Commerce-Project-Overview.pdf) · [Demo walkthrough](docs/demo-guide.md) · [Architecture](docs/architecture.md) · [Portfolio case study](https://mohamedhaniramadan-portfolio.lovable.app/work/ecommerce-operations-prototype)
 
-## Interpretation and limitations
+## Current boundaries
 
-- Clusters describe similarity in the selected product attributes. They do not predict demand or establish causes of sales performance.
-- The variable named `revenue_by_cluster` sums listed prices. It is **not measured revenue**, because transaction quantities and realized sales amounts are unavailable.
-- Earlier notebooks reference an older `shpping_rate` column and a CSV path at the repository root. The committed dataset uses `Shipping Eligibility` inside `Datasets/`; start with the latest notebook.
-- The earlier `project1update .ipynb` reuses the rating outlier threshold for price filtering. Treat that experiment as historical rather than a validated preprocessing method.
-- Sampling is not seeded, K-means initialization count is not specified, and categorical label encodings should not be interpreted as numeric magnitudes. No clustering quality benchmark, automated tests, or fresh execution verification is included.
+This is a local prototype. Sign-in enters the dashboard without verifying the login API, passwords are plaintext, and routes do not enforce authorization. Complete customer checkout, payments and shipping are not implemented. Some analytics are placeholders; total order value is not settled payment revenue. The newest-product recommendation endpoint is not personalized or stock-aware. Python AI examples are not integrated into the running Node demo.
 
-The next improvement is a reproducible environment, corrected preprocessing, explicit K-means initialization settings, and a comparison of cluster quality across candidate values of K.
+## History
 
+This repository now contains eCommerce AI. The earlier academic analysis remains recoverable through Git history.

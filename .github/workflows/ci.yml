@@ -1,0 +1,23 @@
+name: Commerce demo checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  node-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            backend-mern/package-lock.json
+            frontend-react/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci --prefix backend-mern
+      - run: npm ci --prefix frontend-react
+      - run: npm run build --prefix frontend-react
+      - run: python tools/smoke_demo.py
