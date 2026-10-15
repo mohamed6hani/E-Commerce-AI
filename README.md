@@ -2,6 +2,10 @@
 
 A commerce operations prototype built with React, Express and SQLite. The running Node application connects catalog and inventory management, order inspection, dashboard totals and a transparent pricing sandbox. Separate Python examples explore embeddings, vector search, recommendations and forecasting.
 
+## Project brief
+
+[Read the three-page project brief (PDF)](output/pdf/E-Commerce-Project-Overview.pdf) · [Download PDF](https://github.com/mohamed6hani/E-Commerce-AI/raw/refs/heads/main/output/pdf/E-Commerce-Project-Overview.pdf) · [Demo walkthrough](docs/demo-guide.md) · [Architecture](docs/architecture.md) · [Portfolio case study](https://mohamedhaniramadan-portfolio.lovable.app/work/ecommerce-operations-prototype)
+
 ![Store dashboard](docs/assets/dashboard-after.jpg)
 
 ## Quick start
@@ -65,10 +69,6 @@ The smoke check uses an isolated temporary project/database and validates clean 
 ## Development
 
 For React's development server, run the backend on port **8800** (the frontend proxy) and `npm start --prefix frontend-react` in another terminal. Rebuild the frontend before returning to the combined server on port 6220.
-
-## Project brief
-
-[Three-page overview](output/pdf/E-Commerce-Project-Overview.pdf) · [Demo walkthrough](docs/demo-guide.md) · [Architecture](docs/architecture.md) · [Portfolio case study](https://mohamedhaniramadan-portfolio.lovable.app/work/ecommerce-operations-prototype)
 
 ## Current boundaries
 
